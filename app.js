@@ -8,14 +8,13 @@ const app = express()
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))
+
+app.use(express.json())
+
 app.use(cors())
-// db.execute('SELECT * FROM  contacts')
-//   .then((result) => console.log(result[0]))
-//   .catch((error) => {
-//     console.log(error.message)
-//     // process.exit(1)
-//   })
+
 app.use('/contacts', contactsRouter)
+
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })

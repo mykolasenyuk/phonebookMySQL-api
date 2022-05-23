@@ -5,7 +5,12 @@ module.exports = class Contact {
     this.name = name
     this.number = number
   }
-  save() {}
+  save() {
+    db.execute('INSERT INTO contacts (name, number) VALUES (?, ? )', [
+      this.name,
+      this.number,
+    ])
+  }
   static deleteById(id) {}
 
   static getAllContacts() {
