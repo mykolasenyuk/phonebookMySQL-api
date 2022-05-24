@@ -6,15 +6,19 @@ module.exports = class Contact {
     this.number = number
   }
   save() {
-    db.execute('INSERT INTO contacts (name, number) VALUES (?, ? )', [
+    return db.execute('INSERT INTO contacts (name, number) VALUES (?, ? )', [
       this.name,
       this.number,
     ])
   }
-  static deleteById(id) {}
+  static deleteById(id) {
+    return db.execute('SELECT * FROM contacts WHERE contacts.id = ?', [id])
+  }
 
   static getAllContacts() {
     return db.execute('SELECT * FROM contacts')
   }
-  static findbyId(id) {}
+  static findbyId(id) {
+    return db.execute('SELECT * FROM contacts WHERE contacts.id = ?', [id])
+  }
 }
