@@ -2,8 +2,7 @@ const Contact = require('../../models/contact')
 
 const getAllContacts = async (req, res, next) => {
   try {
-    const data = await Contact.getAllContacts()
-    const contacts = data[0]
+    const contacts = await Contact.findAll()
 
     res.status(200).json({
       contacts,

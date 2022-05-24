@@ -3,6 +3,8 @@ const logger = require('morgan')
 const cors = require('cors')
 const contactsRouter = require('./routes/api/contacts')
 
+const sequelize = require('./bin/server')
+
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -27,5 +29,12 @@ app.use((err, req, res, next) => {
   } = err /* default error (4args) */
   res.status(status).json({ message })
 })
-
+sequelize
+  .sync()
+  .then((result) => {
+    // console.log(result)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 app.listen(3000, console.log('database is runnig on port:3000'))

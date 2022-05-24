@@ -2,17 +2,13 @@ const Contact = require('../../models/contact')
 
 const addContact = async (req, res, next) => {
   try {
-    const name = req.body.name
-    // console.log(name)
-    const number = req.body.number
-    //
-    const contact = new Contact(null, name, number)
+    // console.log(req.body)
 
-    await contact.save()
+    const contact = req.body
+    await Contact.create(contact)
 
     res.status(200).json({
-      name,
-      number,
+      contact,
     })
   } catch (error) {
     next(error)
