@@ -2,6 +2,8 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const contactsRouter = require('./routes/api/contacts')
+const Contact = require('./models/contact')
+const User = require('./models/user')
 
 const sequelize = require('./bin/server')
 
@@ -14,6 +16,14 @@ app.use(logger(formatsLogger))
 app.use(express.json())
 
 app.use(cors())
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user
+      next()
+    })
+    .catch((err) => console.log(err))
+})
 
 app.use('/contacts', contactsRouter)
 
@@ -29,12 +39,29 @@ app.use((err, req, res, next) => {
   } = err /* default error (4args) */
   res.status(status).json({ message })
 })
+
+Contact.belongsTo(User, { constrains: true, onDelete: 'CASCADE' })
+User.hasMany(Contact)
+
 sequelize
-  .sync()
+  .sync({ force: true })
   .then((result) => {
+    return User.findByPk(1)
     // console.log(result)
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({
+        name: 'Tecster',
+        email: 'tecater30@mail.go',
+      })
+    }
+    return user
+  })
+  .then((user) => {
+    // console.log(user)
+    app.listen(3000, console.log('database is runnig on port:3000'))
   })
   .catch((err) => {
     console.log(err)
   })
-app.listen(3000, console.log('database is runnig on port:3000'))

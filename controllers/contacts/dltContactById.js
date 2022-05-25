@@ -3,12 +3,21 @@ const Contact = require('../../models/contact')
 const dltContact = async (req, res, next) => {
   try {
     const id = Number(req.params.id)
-    console.log(id)
-    const data = await Contact.findbyId(id)
-    const contact = data[0]
-    // console.log(contact)
+
+    const contact = await Contact.findByPk(id)
+
+    if (!contact) {
+      res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: `Conatct with ID=${id} not found`,
+      })
+    }
+    await contact.destroy()
+
+    console.log(contact)
     res.status(200).json({
-      contact,
+      message: `Conatct with ID=${id} deleted`,
     })
   } catch (error) {
     next(error)

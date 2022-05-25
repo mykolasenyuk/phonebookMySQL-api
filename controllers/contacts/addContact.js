@@ -5,7 +5,9 @@ const addContact = async (req, res, next) => {
     // console.log(req.body)
 
     const contact = req.body
-    await Contact.create(contact)
+
+    // console.log(newContact)
+    await req.user.createContact(contact)
 
     res.status(200).json({
       contact,
