@@ -2,10 +2,12 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 const contactsRouter = require('./routes/api/contacts')
+const authRouter = require('./routes/api/auth')
 const Contact = require('./models/contact')
 const User = require('./models/user')
 
 const sequelize = require('./bin/server')
+const { auth } = require('./controllers')
 
 const app = express()
 
@@ -16,15 +18,16 @@ app.use(logger(formatsLogger))
 app.use(express.json())
 
 app.use(cors())
-app.use((req, res, next) => {
-  User.findByPk(2)
-    .then((user) => {
-      req.user = user
-      next()
-    })
-    .catch((err) => console.log(err))
-})
+// app.use((req, res, next) => {
+//   User.findByPk(2)
+//     .then((user) => {
+//       req.user = user
+//       next()
+//     })
+//     .catch((err) => console.log(err))
+// })
 
+app.use('/', authRouter)
 app.use('/contacts', contactsRouter)
 
 app.use((req, res) => {
@@ -46,19 +49,19 @@ User.hasMany(Contact)
 sequelize
   .sync()
   // .sync({ force: true })
-  .then((result) => {
-    return User.findByPk(2)
-    // console.log(result)
-  })
-  .then((user) => {
-    if (!user) {
-      return User.create({
-        name: 'Nicky',
-        email: 'nicky@mail.go',
-      })
-    }
-    return user
-  })
+  // .then((result) => {
+  //   return User.findByPk(2)
+  //   // console.log(result)
+  // })
+  // .then((user) => {
+  //   if (!user) {
+  //     return User.create({
+  //       name: 'Nicky',
+  //       email: 'nicky@mail.go',
+  //     })
+  //   }
+  //   return user
+  // })
   .then((user) => {
     // console.log(user)
 

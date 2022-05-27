@@ -8,6 +8,7 @@ const updateContact = async (req, res, next) => {
 
     const data = await req.user.getContacts({ where: { id: contId } })
     let contact = data[0]
+
     contact.set(updatedData)
 
     contact = await contact.save()
