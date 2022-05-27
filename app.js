@@ -17,7 +17,7 @@ app.use(express.json())
 
 app.use(cors())
 app.use((req, res, next) => {
-  User.findByPk(1)
+  User.findByPk(2)
     .then((user) => {
       req.user = user
       next()
@@ -44,22 +44,24 @@ Contact.belongsTo(User, { constrains: true, onDelete: 'CASCADE' })
 User.hasMany(Contact)
 
 sequelize
-  .sync({ force: true })
+  .sync()
+  // .sync({ force: true })
   .then((result) => {
-    return User.findByPk(1)
+    return User.findByPk(2)
     // console.log(result)
   })
   .then((user) => {
     if (!user) {
       return User.create({
-        name: 'Tecster',
-        email: 'tecater30@mail.go',
+        name: 'Nicky',
+        email: 'nicky@mail.go',
       })
     }
     return user
   })
   .then((user) => {
     // console.log(user)
+
     app.listen(3000, console.log('database is runnig on port:3000'))
   })
   .catch((err) => {

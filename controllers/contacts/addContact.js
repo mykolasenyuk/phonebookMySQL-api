@@ -2,11 +2,9 @@ const Contact = require('../../models/contact')
 
 const addContact = async (req, res, next) => {
   try {
-    // console.log(req.body)
-
+    console.log(req.user)
     const contact = req.body
 
-    // console.log(newContact)
     await req.user.createContact(contact)
 
     res.status(200).json({

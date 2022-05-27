@@ -2,10 +2,12 @@ const Contact = require('../../models/contact')
 
 const updateContact = async (req, res, next) => {
   try {
-    const id = Number(req.params.id)
+    const contId = Number(req.params.id)
     const updatedData = req.body
-    let contact = await Contact.findByPk(id)
+    // let contact = await Contact.findByPk(id)
 
+    const data = await req.user.getContacts({ where: { id: contId } })
+    let contact = data[0]
     contact.set(updatedData)
 
     contact = await contact.save()
